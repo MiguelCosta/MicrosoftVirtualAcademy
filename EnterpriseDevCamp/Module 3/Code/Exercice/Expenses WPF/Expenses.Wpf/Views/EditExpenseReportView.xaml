@@ -1,0 +1,83 @@
+﻿<UserControl x:Class="Expenses.Wpf.EditExpenseReportView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:expenses="clr-namespace:Expenses.Wpf"
+             mc:Ignorable="d" 
+             d:DesignHeight="1024" d:DesignWidth="768">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <expenses:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+    </UserControl.Resources>
+
+    <Grid Background="White">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width=".5*" />
+            <ColumnDefinition Width=".5*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="35" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <Label Grid.Row="0" Content="Expense Report" />
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Content="Save" 
+                            Command="{Binding SaveReportCommand}"
+                            IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}"
+                            Visibility="{Binding CanSave,Converter={StaticResource BooleanToVisibilityConverter}}"
+                            HorizontalAlignment="Right" Margin="4,2,4,2" MinWidth="60" Width="73" Height="30"
+                            />
+                    <Button Content="Submit" 
+                            Command="{Binding Path=ExpenseReport.SubmitReportCommand}"
+                            IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}"
+                            Visibility="{Binding CanSubmit,Converter={StaticResource BooleanToVisibilityConverter}}"
+                            HorizontalAlignment="Right" Margin="4,2,4,2" MinWidth="60" Width="73" Height="30"
+                            />
+                    <Button Content="Delete" 
+                            Command="{Binding Path=ExpenseReport.DeleteReportCommand}"
+                            IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}"
+                            Visibility="{Binding CanDelete,Converter={StaticResource BooleanToVisibilityConverter}}"
+                            HorizontalAlignment="Right" Margin="4,2,4,2" MinWidth="60" Width="73" Height="30"
+                            />
+                </StackPanel>
+                <ScrollViewer Grid.Row="1">
+                    <expenses:ExpenseReportView IsEnabled="{Binding CanSave}" />
+                </ScrollViewer>
+            </Grid>
+        </Grid>
+
+
+        <Grid Grid.Column="1" Margin="15,0,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Label Content="Associated Charges" Grid.Row="0" />
+                <expenses:ExpenseReportChargesView Grid.Row="1" IsEnabled="{Binding CanModifyCharges}" />
+            </Grid>
+
+            <Grid Grid.Row="1" Visibility="{Binding CanModifyCharges,Converter={StaticResource BooleanToVisibilityConverter}}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Label Content="Outstanding Charges" Grid.Row="0" />
+                <expenses:AddChargesView Grid.Row="1" />
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>

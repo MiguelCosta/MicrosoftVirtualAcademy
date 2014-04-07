@@ -1,0 +1,306 @@
+﻿<Page
+    x:Name="pageRoot"
+    x:Class="Expenses.WindowsStore.HubPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Expenses.WindowsStore"
+    xmlns:data="using:Expenses.WindowsStore.Data"
+    xmlns:common="using:Expenses.WindowsStore.Common"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:Expenses.ViewModel"
+    mc:Ignorable="d">
+
+    <Page.Resources>
+        <local:StringFormatConverter x:Key="StringFormatConverter"/>
+        <local:DateTimeToStringConverter x:Key="DateTimeToStringConverter"/>
+        <local:DateTimeToDaysOldStringConverter x:Key="DateTimeToDaysOldStringConverter"/>
+        <local:DoubleToCurrencyStringConverter x:Key="DoubleToCurrencyStringConverter"/>
+        <local:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </Page.Resources>
+
+    <!--
+    This grid acts as a root panel for the page.
+  -->
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" d:DataContext="{d:DesignInstance Type=local:MainWindowViewModel}">
+        <Grid Visibility="{Binding LoggedIn, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Grid.ChildrenTransitions>
+                <TransitionCollection>
+                    <EntranceThemeTransition/>
+                </TransitionCollection>
+            </Grid.ChildrenTransitions>
+            <Hub x:Name="_hub">
+                <Hub.Header>
+                    <!-- Back button and page title -->
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="120"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Button  x:Name="backButton" Style="{StaticResource NavigationBackButtonNormalStyle}"
+                        Margin="-1,-1,39,0" 
+                        VerticalAlignment="Top"
+                        Command="{Binding NavigationHelper.GoBackCommand, ElementName=pageRoot}"
+                        AutomationProperties.Name="Back"
+                        AutomationProperties.AutomationId="BackButton"
+                        AutomationProperties.ItemType="Navigation Button"/>
+                        <TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Style="{StaticResource HeaderTextBlockStyle}" Grid.Column="1" 
+                        VerticalAlignment="Top" IsHitTestVisible="false" TextWrapping="NoWrap" />
+                    </Grid>
+                </Hub.Header>
+                <HubSection  Margin="120,0,0,0" Width="400" Header="Expenses summary" DataContext="{Binding CurrentViewModel.SummaryItemsViewModel}" d:DataContext="{d:DesignInstance Type=vm:SummaryItemsViewModel}">
+                    <DataTemplate>
+                        <StackPanel Width="300">
+                            <StackPanel Background="{StaticResource ItemTemplateBackgroundColor}" Margin="0,5,0,0">
+                                <Grid Margin="5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="70" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Text="{Binding NumberOfCharges, FallbackValue='4'}" Grid.Column="0" Style="{StaticResource ExtraLargeTextBlock}" />
+
+                                    <Grid Grid.Column="1">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="*" MinHeight="20" />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+
+                                        <TextBlock Text="Total outstanding charges" Grid.Column="0" Style="{StaticResource SubtitleTextBlockStyle}" VerticalAlignment="Top" HorizontalAlignment="Right" />
+
+                                        <StackPanel Grid.Row="2">
+                                            <TextBlock Text="{Binding AmountOfCharges, Converter={StaticResource StringFormatConverter}, ConverterParameter='\{0:C\}', FallbackValue='$267.00'}" Style="{StaticResource CurrencyTextBlock}" HorizontalAlignment="Right" />
+                                            <TextBlock HorizontalAlignment="Right" Margin="0,5,0,0">
+                                                <Run Text="from " />
+                                                <Run Text="{Binding BeginDateOfCharges, Converter={StaticResource StringFormatConverter}, ConverterParameter='\{0:d\}', FallbackValue='9/9/2013'}" />
+                                                <Run Text=" to " />
+                                                <Run Text="{Binding EndDateOfCharges, Converter={StaticResource StringFormatConverter}, ConverterParameter='\{0:d\}', FallbackValue='10/20/2013'}" />
+                                            </TextBlock>
+                                        </StackPanel>
+                                    </Grid>
+                                </Grid>
+                            </StackPanel>
+
+                            <StackPanel Background="{StaticResource ItemTemplateBackgroundColor}" Margin="0,5,0,0">
+                                <Grid Margin="5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="70" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{Binding NumberOfChargesLT30Days, FallbackValue='3'}" Grid.Column="0" Style="{StaticResource ExtraLargeTextBlock}" />
+
+                                    <Grid Grid.Column="1">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="*" MinHeight="20" />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+
+                                        <TextBlock Text="Charges in the past 30 days" Grid.Row="0" Style="{StaticResource SubtitleTextBlockStyle}" VerticalAlignment="Top" HorizontalAlignment="Right" />
+
+                                        <TextBlock Grid.Row="2" Text="{Binding AmountOfChargesLT30Days, Converter={StaticResource StringFormatConverter}, ConverterParameter='\{0:C\}', FallbackValue='$67.00'}" Style="{StaticResource CurrencyTextBlock}" HorizontalAlignment="Right" />
+                                    </Grid>
+                                </Grid>
+                            </StackPanel>
+
+                            <StackPanel Background="{StaticResource ItemTemplateBackgroundColor}" Margin="0,5,0,0">
+                                <Grid Margin="5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="70" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{Binding NumberOfCharges30To44Days, FallbackValue='0'}" Style="{StaticResource ExtraLargeTextBlock}" />
+
+                                    <Grid Grid.Column="1">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="*" MinHeight="20" />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+
+                                        <TextBlock Text="Charges from 30-45 days ago" Style="{StaticResource SubtitleTextBlockStyle}" VerticalAlignment="Top" HorizontalAlignment="Right" />
+
+
+                                        <TextBlock Grid.Row="2" Text="{Binding AmountOfCharges30To44Days, Converter={StaticResource StringFormatConverter}, ConverterParameter='\{0:C\}', FallbackValue='$0.00'}" Style="{StaticResource CurrencyTextBlock}" HorizontalAlignment="Right" />
+                                    </Grid>
+                                </Grid>
+                            </StackPanel>
+
+                            <StackPanel Background="{StaticResource ItemTemplateBackgroundColor}" Margin="0,5,0,0">
+                                <Grid Margin="5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="70" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{Binding NumberOfChargesGT45Days, FallbackValue='0'}" Style="{StaticResource ExtraLargeTextBlock}" />
+
+                                    <Grid Grid.Column="1">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="*" MinHeight="20" />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Text="Charges older than 45 days" Style="{StaticResource SubtitleTextBlockStyle}" VerticalAlignment="Top" HorizontalAlignment="Right" />
+
+                                        <TextBlock Grid.Row="2" Text="{Binding AmountOfChargesGT45Days, Converter={StaticResource StringFormatConverter}, ConverterParameter='\{0:C\}', FallbackValue='$0.00'}" Style="{StaticResource CurrencyTextBlock}"  HorizontalAlignment="Right" />
+                                    </Grid>
+                                </Grid>
+                            </StackPanel>
+
+                            <StackPanel Background="{StaticResource ItemTemplateBackgroundColor}" Margin="0,5,0,0">
+                                <Grid Margin="5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="70" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{Binding NumberOfSavedReports, FallbackValue='0'}" Style="{StaticResource ExtraLargeTextBlock}" />
+
+                                    <Grid Grid.Column="1">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="*" MinHeight="20" />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Text="Saved expense reports" Style="{StaticResource SubtitleTextBlockStyle}" VerticalAlignment="Top" HorizontalAlignment="Right" />
+
+                                        <TextBlock Grid.Row="2" Text="{Binding AmountOfSavedReports, Converter={StaticResource StringFormatConverter}, ConverterParameter='\{0:C\}', FallbackValue='$0.00'}" Style="{StaticResource CurrencyTextBlock}" HorizontalAlignment="Right" />
+                                    </Grid>
+                                </Grid>
+                            </StackPanel>
+
+                            <StackPanel Background="{StaticResource ItemTemplateBackgroundColor}" Margin="0,5,0,0">
+                                <Grid Margin="5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="70" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{Binding NumberOfPendingReports, FallbackValue='3'}" Style="{StaticResource ExtraLargeTextBlock}" />
+
+                                    <Grid Grid.Column="1">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="*" MinHeight="20" />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Text="Expense reports pending approval" Style="{StaticResource SubtitleTextBlockStyle}" VerticalAlignment="Top" HorizontalAlignment="Right" />
+
+                                        <TextBlock Grid.Row="2" Text="{Binding AmountOfPendingReports, Converter={StaticResource StringFormatConverter}, ConverterParameter='\{0:C\}', FallbackValue='$1,090.00'}" Style="{StaticResource CurrencyTextBlock}" HorizontalAlignment="Right" />
+                                    </Grid>
+                                </Grid>
+                            </StackPanel>
+
+                            <StackPanel Background="{StaticResource ItemTemplateBackgroundColor}" Margin="0,5,0,0">
+                                <Grid Margin="5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="70" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{Binding NumberOfReportsNeedingApproval, FallbackValue='0'}" Style="{StaticResource ExtraLargeTextBlock}" />
+
+                                    <Grid Grid.Column="1">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="*" MinHeight="20" />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Text="Reports waiting for your approval" Style="{StaticResource SubtitleTextBlockStyle}" VerticalAlignment="Top" HorizontalAlignment="Right" />
+
+                                        <TextBlock Grid.Row="2" Text="{Binding AmountOfReportsNeedingApproval, Converter={StaticResource StringFormatConverter}, ConverterParameter='\{0:C\}', FallbackValue='$0.00'}" Style="{StaticResource CurrencyTextBlock}" HorizontalAlignment="Right" />
+                                    </Grid>
+                                </Grid>
+                            </StackPanel>
+                        </StackPanel>
+                    </DataTemplate>
+                </HubSection>
+                <HubSection x:Name="_outstandingChargesHubSection" Width="350" Header="Outstanding charges" DataContext="{Binding CurrentViewModel.ChargesViewModel}" d:DataContext="{d:DesignInstance Type=vm:ChargesViewModel}">
+                    <DataTemplate>
+                        <ItemsControl ItemsSource="{Binding Charges}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Background="{StaticResource ItemTemplateBackgroundColor}" Margin="0,5,0,0" Width="250">
+                                        <Grid Margin="5">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="70" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+
+                                            <StackPanel Grid.Column="0">
+                                                <TextBlock Text="{Binding ExpenseDate, Converter={StaticResource DateTimeToDaysOldStringConverter}}" Style="{StaticResource ExtraLargeTextBlock}" />
+                                                <TextBlock Text="day(s) old" Style="{StaticResource SubtitleTextBlockStyle}" />
+                                            </StackPanel>
+
+                                            <Grid Grid.Column="1">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="*" />
+                                                    <RowDefinition Height="Auto" />
+                                                </Grid.RowDefinitions>
+
+                                                <TextBlock Grid.Row="0" Text="{Binding ExpenseDate, Converter={StaticResource DateTimeToStringConverter}}" TextWrapping="Wrap" HorizontalAlignment="Right" Style="{StaticResource SubtitleTextBlockStyle}" />
+
+                                                <StackPanel Grid.Row="2">
+                                                    <TextBlock Text="{Binding Merchant}" TextWrapping="Wrap" HorizontalAlignment="Right" Style="{StaticResource SubtitleTextBlockStyle}" />
+                                                    <TextBlock Text="{Binding Location}" TextWrapping="Wrap" HorizontalAlignment="Right" Style="{StaticResource SubtitleTextBlockStyle}" />
+                                                    <TextBlock Text="{Binding BilledAmount, Converter={StaticResource DoubleToCurrencyStringConverter}}" HorizontalAlignment="Right" Style="{StaticResource CurrencyTextBlock}" />
+                                                </StackPanel>
+                                            </Grid>
+                                        </Grid>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </DataTemplate>
+                </HubSection>
+                <HubSection Width="400" Header="Pending approvals" DataContext="{Binding CurrentViewModel.ApproveExpenseReportsViewModel}" d:DataContext="{d:DesignInstance Type=local:ApproveExpenseReportsViewModel}">
+                    <DataTemplate>
+                        <ItemsControl x:Name="_approvalsItemsControl" ItemsSource="{Binding ExpenseReports}" HorizontalContentAlignment="Stretch">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Background="{StaticResource ItemTemplateBackgroundColor}" Margin="0,5,0,0" Width="300">
+                                        <Grid Margin="5">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="70" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+
+                                            <StackPanel Grid.Column="0">
+                                                <TextBlock Text="{Binding DisplayDate, Converter={StaticResource DateTimeToDaysOldStringConverter}}" Style="{StaticResource ExtraLargeTextBlock}" />
+                                                <TextBlock Text="day(s) old" Style="{StaticResource SubtitleTextBlockStyle}" />
+                                            </StackPanel>
+
+                                            <Grid Grid.Column="1">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="*" />
+                                                    <RowDefinition Height="Auto" />
+                                                </Grid.RowDefinitions>
+
+                                                <TextBlock Grid.Row="0" Text="{Binding DisplayDate, Converter={StaticResource DateTimeToStringConverter}}" TextWrapping="Wrap" HorizontalAlignment="Right" Style="{StaticResource SubtitleTextBlockStyle}" />
+
+                                                <StackPanel Grid.Row="2">
+                                                    <TextBlock Text="{Binding Purpose}" TextWrapping="Wrap" HorizontalAlignment="Right" Style="{StaticResource SubtitleTextBlockStyle}" />
+                                                    <TextBlock Text="{Binding Notes}" TextWrapping="Wrap" HorizontalAlignment="Right" Style="{StaticResource SubtitleTextBlockStyle}" />
+                                                    <TextBlock Text="{Binding BilledAmount, Converter={StaticResource DoubleToCurrencyStringConverter}}" HorizontalAlignment="Right" Style="{StaticResource CurrencyTextBlock}" />
+
+                                                    <Button Content="Approve" Command="{Binding ElementName=_approvalsItemsControl, Path=DataContext.ApproveReportCommand}" CommandParameter="{Binding}" HorizontalAlignment="Right" />
+                                                </StackPanel>
+                                            </Grid>
+                                        </Grid>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </DataTemplate>
+                </HubSection>
+            </Hub>
+        </Grid>
+
+        <ProgressRing x:Name="ExpenseReportsHistoryProgressRing" Visibility="{Binding ShowLogin, Converter={StaticResource BooleanToVisibilityConverter}}"
+                      Height="150"
+                      Width="150"
+                      IsActive="True"/>
+
+        <local:LoginView DataContext="{Binding LoginViewModel}" Visibility="{Binding ShowLogin, Converter={StaticResource BooleanToVisibilityConverter}}" />
+    </Grid>
+</Page>

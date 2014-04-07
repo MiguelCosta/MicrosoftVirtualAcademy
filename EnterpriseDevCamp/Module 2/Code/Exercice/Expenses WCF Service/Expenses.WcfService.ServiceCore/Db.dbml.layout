@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="Db">
+  <DataContextMoniker Name="/DbDataContext" />
+  <nestedChildShapes>
+    <classShape Id="9b2f0159-6918-4861-a98f-54b8d0315187" absoluteBounds="6.25, 3.25, 2, 3.5016097005208326">
+      <DataClassMoniker Name="/DbDataContext/Charge" />
+      <nestedChildShapes>
+        <elementListCompartment Id="cbdb5067-8a96-4287-8feb-2bfcce734a95" absoluteBounds="6.265, 3.71, 1.9700000000000002, 2.941609700520833" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="b8601568-e5ee-4e77-a8a2-a13f4091aee7" absoluteBounds="3.5, 3.375, 2, 3.3093082682291666">
+      <DataClassMoniker Name="/DbDataContext/ExpenseReport" />
+      <nestedChildShapes>
+        <elementListCompartment Id="0c7960a9-c9e9-4a5c-a457-d1c473dd6615" absoluteBounds="3.515, 3.835, 1.9700000000000002, 2.7493082682291665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="5c7be486-4f0b-41bc-a28b-0445d58c0e95" absoluteBounds="0.75, 4.25, 2, 1.5785953776041666">
+      <DataClassMoniker Name="/DbDataContext/Employee" />
+      <nestedChildShapes>
+        <elementListCompartment Id="f7106a8c-df49-444e-9dfa-30f563405c4e" absoluteBounds="0.765, 4.71, 1.9700000000000002, 1.0185953776041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(5.5 : 5.02965413411458); (6.25 : 5.02965413411458)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/DbDataContext/ExpenseReport/ExpenseReport_Charge" />
+      <nodes>
+        <classShapeMoniker Id="b8601568-e5ee-4e77-a8a2-a13f4091aee7" />
+        <classShapeMoniker Id="9b2f0159-6918-4861-a98f-54b8d0315187" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(1.75 : 4.25); (1.75 : 3.28125); (6.25 : 3.28125)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/DbDataContext/Employee/Employee_Charge" />
+      <nodes>
+        <classShapeMoniker Id="5c7be486-4f0b-41bc-a28b-0445d58c0e95" />
+        <classShapeMoniker Id="9b2f0159-6918-4861-a98f-54b8d0315187" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(2.75 : 5.03929768880208); (3.5 : 5.03929768880208)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/DbDataContext/Employee/Employee_ExpenseReport" />
+      <nodes>
+        <classShapeMoniker Id="5c7be486-4f0b-41bc-a28b-0445d58c0e95" />
+        <classShapeMoniker Id="b8601568-e5ee-4e77-a8a2-a13f4091aee7" />
+      </nodes>
+    </associationConnector>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>

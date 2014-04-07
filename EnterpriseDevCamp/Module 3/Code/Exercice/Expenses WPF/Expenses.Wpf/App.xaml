@@ -1,0 +1,28 @@
+﻿<Application x:Class="Expenses.Wpf.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:uc="clr-namespace:Expenses.Wpf"
+             xmlns:vm="clr-namespace:Expenses.ViewModel;assembly=Expenses.ViewModel"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Application.Resources>
+
+        <DataTemplate DataType="{x:Type vm:ChargesViewModel}">
+            <uc:ChargesView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:ChargeViewModel}">
+            <uc:ChargeView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:ExpenseReportsViewModel}">
+            <uc:ExpenseReportsView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:EditExpenseReportViewModel}">
+            <uc:EditExpenseReportView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:ApproveExpenseReportsViewModel}">
+            <uc:ApproveExpenseReportsView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:SummaryItemsViewModel}">
+            <uc:SummaryView />
+        </DataTemplate>
+        
+    </Application.Resources>
+</Application>

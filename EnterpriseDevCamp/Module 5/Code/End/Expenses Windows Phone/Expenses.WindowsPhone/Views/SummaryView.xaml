@@ -1,0 +1,156 @@
+﻿<UserControl x:Class="Expenses.WindowsPhone.SummaryView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:expenses="clr-namespace:Expenses.WindowsPhone"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    mc:Ignorable="d"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    d:DesignHeight="480" d:DesignWidth="480">
+    <UserControl.Resources>
+        <expenses:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </UserControl.Resources>
+
+    <phone:Panorama>
+        <phone:PanoramaItem Header="summary" DataContext="{Binding SummaryItemsViewModel}">
+            <ScrollViewer>
+                <StackPanel>
+                    <StackPanel Background="CornflowerBlue" Margin="0,5,0,0">
+                        <StackPanel Margin="5">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding NumberOfCharges, FallbackValue='4'}" FontSize="{StaticResource PhoneFontSizeExtraLarge}" />
+                                <TextBlock Text="total outstanding charges" VerticalAlignment="Bottom" Margin="10,0,0,5" />
+                            </StackPanel>
+
+                            <TextBlock Text="{Binding AmountOfCharges, StringFormat='\{0:C\}', FallbackValue='$267.00'}" FontSize="{StaticResource PhoneFontSizeExtraLarge}" HorizontalAlignment="Right" />
+
+                            <TextBlock Style="{StaticResource PhoneTextNormalStyle}" HorizontalAlignment="Right">
+						        <Run Text="from " />
+						        <Run Text="{Binding BeginDateOfCharges, StringFormat='\{0:d\}', FallbackValue='9/9/2013'}" />
+						        <Run Text=" to " />
+						        <Run Text="{Binding EndDateOfCharges, StringFormat='\{0:d\}', FallbackValue='10/20/2013'}" />
+                            </TextBlock>
+
+                        </StackPanel>
+                    </StackPanel>
+
+                    <StackPanel Background="Green" Margin="0,5,0,0">
+                        <StackPanel Margin="5">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding NumberOfChargesLT30Days, FallbackValue='3'}" FontSize="{StaticResource PhoneFontSizeExtraLarge}" />
+                                <TextBlock Text="charges in the past 30 days" VerticalAlignment="Bottom" Margin="10,0,0,5" />
+                            </StackPanel>
+
+                            <TextBlock Text="{Binding AmountOfChargesLT30Days, StringFormat='\{0:C\}', FallbackValue='$67.00'}" FontSize="{StaticResource PhoneFontSizeExtraLarge}" HorizontalAlignment="Right" />
+                        </StackPanel>
+                    </StackPanel>
+
+                    <StackPanel Background="#FFE1B700" Margin="0,5,0,0">
+                        <StackPanel Margin="5">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding NumberOfCharges30To44Days, FallbackValue='0'}" FontSize="{StaticResource PhoneFontSizeExtraLarge}" />
+                                <TextBlock Text="charges from 30-45 days ago" VerticalAlignment="Bottom" Margin="10,0,0,5" />
+                            </StackPanel>
+
+                            <TextBlock Text="{Binding AmountOfCharges30To44Days, StringFormat='\{0:C\}', FallbackValue='$0.00'}" FontSize="{StaticResource PhoneFontSizeExtraLarge}" HorizontalAlignment="Right" />
+                        </StackPanel>
+                    </StackPanel>
+
+                    <StackPanel Background="#FFB01E00" Margin="0,5,0,0">
+                        <StackPanel Margin="5">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding NumberOfChargesGT45Days, FallbackValue='0'}" FontSize="{StaticResource PhoneFontSizeExtraLarge}" />
+                                <TextBlock Text="charges older than 45 days" VerticalAlignment="Bottom" Margin="10,0,0,5" />
+                            </StackPanel>
+
+                            <TextBlock Text="{Binding AmountOfChargesGT45Days, StringFormat='\{0:C\}', FallbackValue='$0.00'}" FontSize="{StaticResource PhoneFontSizeExtraLarge}"  HorizontalAlignment="Right" />
+                        </StackPanel>
+                    </StackPanel>
+
+                    <StackPanel Background="CornflowerBlue" Margin="0,5,0,0">
+                        <StackPanel Margin="5">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding NumberOfSavedReports, FallbackValue='0'}" FontSize="{StaticResource PhoneFontSizeExtraLarge}" />
+                                <TextBlock Text="saved expense reports" VerticalAlignment="Bottom" Margin="10,0,0,5" />
+                            </StackPanel>
+
+                            <TextBlock Text="{Binding AmountOfSavedReports, StringFormat='\{0:C\}', FallbackValue='$0.00'}" FontSize="{StaticResource PhoneFontSizeExtraLarge}" HorizontalAlignment="Right" />
+                        </StackPanel>
+                    </StackPanel>
+
+                    <StackPanel Background="Green" Margin="0,5,0,0">
+                        <StackPanel Margin="5">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding NumberOfPendingReports, FallbackValue='3'}" FontSize="{StaticResource PhoneFontSizeExtraLarge}" />
+                                <TextBlock Text="expense reports pending approval" VerticalAlignment="Bottom" Margin="10,0,0,5" />
+                            </StackPanel>
+
+                            <TextBlock Text="{Binding AmountOfPendingReports, StringFormat='\{0:C\}', FallbackValue='$1,090.00'}" FontSize="{StaticResource PhoneFontSizeExtraLarge}" HorizontalAlignment="Right" />
+                        </StackPanel>
+                    </StackPanel>
+
+					<StackPanel Background="#FFFF7E00" Margin="0,5,0,0">
+                        <StackPanel Margin="5">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding NumberOfReportsNeedingApproval, FallbackValue='0'}" FontSize="{StaticResource PhoneFontSizeExtraLarge}" />
+                                <TextBlock Text="reports waiting for your approval" VerticalAlignment="Bottom" Margin="10,0,0,5" />
+                            </StackPanel>
+
+                            <TextBlock Text="{Binding AmountOfReportsNeedingApproval, StringFormat='\{0:C\}', FallbackValue='$0.00'}" FontSize="{StaticResource PhoneFontSizeExtraLarge}" HorizontalAlignment="Right" />                            
+                        </StackPanel>
+                    </StackPanel>
+
+                </StackPanel>
+            </ScrollViewer>
+        </phone:PanoramaItem>
+        <phone:PanoramaItem Header="charges" DataContext="{Binding ChargesViewModel}">
+            <ListBox ItemsSource="{Binding Charges}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Background="CornflowerBlue" Margin="0,5,0,0" Width="375">
+							<StackPanel Margin="5">
+								<TextBlock Text="{Binding Merchant}" FontSize="{StaticResource PhoneFontSizeExtraLarge}" />
+
+								<Grid>
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition Width="*" />
+										<ColumnDefinition Width="Auto" />
+									</Grid.ColumnDefinitions>
+
+									<StackPanel Grid.Column="0">
+										<TextBlock Text="{Binding Location}" />
+										<TextBlock Text="{Binding Description}" />
+										<TextBlock Text="{Binding ExpenseDate, StringFormat=d}" />
+									</StackPanel>
+
+									<TextBlock Grid.Column="1" Text="{Binding TransactionAmount, StringFormat=C}" VerticalAlignment="Bottom" FontSize="{StaticResource PhoneFontSizeExtraLarge}" />
+								</Grid>
+							</StackPanel>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </phone:PanoramaItem>
+        <phone:PanoramaItem Header="approvals" DataContext="{Binding ApproveExpenseReportsViewModel}">
+            <ListBox x:Name="_approvalsListBox" ItemsSource="{Binding ExpenseReports}" HorizontalContentAlignment="Stretch">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+						<StackPanel Background="#FFFF7E00" Margin="0,5,0,0" Width="375">
+							<StackPanel Margin="5">
+								<TextBlock Text="{Binding Purpose}" FontSize="{StaticResource PhoneFontSizeLarge}" />
+								<TextBlock Text="{Binding Notes}" />
+								<TextBlock Text="{Binding DisplayDate, StringFormat=d}" />
+								<TextBlock Text="{Binding Amount, StringFormat=C}" FontSize="{StaticResource PhoneFontSizeLarge}" />
+
+								<Button Content="Approve" Command="{Binding ElementName=_approvalsListBox, Path=DataContext.ApproveReportCommand}" CommandParameter="{Binding}" />
+							</StackPanel>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </phone:PanoramaItem>
+    </phone:Panorama>
+</UserControl>

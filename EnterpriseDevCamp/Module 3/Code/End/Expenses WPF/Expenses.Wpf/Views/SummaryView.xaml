@@ -1,0 +1,103 @@
+﻿<UserControl x:Class="Expenses.Wpf.SummaryView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:expenses="clr-namespace:Expenses.Wpf"
+             mc:Ignorable="d" 
+             d:DesignHeight="1000" d:DesignWidth="1000">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        
+        <Style x:Key="TitleTextBlockStyle" TargetType="{x:Type TextBlock}">
+            <Setter Property="TextWrapping" Value="NoWrap"/>
+            <Setter Property="TextTrimming" Value="None"/>
+            <Setter Property="FontWeight" Value="ExtraBold" />
+            <Setter Property="FontSize" Value="20" />
+            <Setter Property="Margin" Value="0,0,0,10" />
+        </Style>
+        <Style x:Key="BodyTextBlockStyle" TargetType="{x:Type TextBlock}">
+            <Setter Property="TextWrapping" Value="NoWrap"/>
+            <Setter Property="TextTrimming" Value="None"/>
+            <Setter Property="FontSize" Value="18" />
+        </Style>
+    </UserControl.Resources>
+
+    <Grid x:Name="root">
+        <ScrollViewer>
+            <WrapPanel Orientation="Horizontal">
+                <Grid Background="LightSteelBlue" Margin="5,10,5,10" Width="300" Height="300">
+                    <StackPanel Margin="5">
+                        <TextBlock Text="My Charges Summary" Style="{DynamicResource TitleTextBlockStyle}" />
+                    
+                        <TextBlock Style="{DynamicResource BodyTextBlockStyle}">
+                            <Hyperlink Command="{Binding DataContext.ShowChargesCommand, RelativeSource={RelativeSource AncestorType={x:Type expenses:MainWindow}}}">
+                                <Run Text="{Binding NumberOfCharges, StringFormat='\{0\} oustanding charges'}" />    
+                            </Hyperlink>
+                            <Run Text="for" />
+                            <Run Text="{Binding AmountOfCharges, StringFormat='\{0:C\}'}" />
+                        </TextBlock>
+                        <TextBlock Style="{DynamicResource BodyTextBlockStyle}" Margin="0,0,0,10">
+                            <Run Text="(from" />
+                            <Run Text="{Binding BeginDateOfCharges, StringFormat='\{0:d\}'}" />
+                            <Run Text="to" />
+                            <Run Text="{Binding EndDateOfCharges, StringFormat='\{0:d\})'}" />
+                        </TextBlock>
+                        <TextBlock Style="{DynamicResource BodyTextBlockStyle}" Margin="25,0,0,10">
+                            <Run Text="{Binding NumberOfChargesLT30Days}" />
+                            <Run Text="for" />
+                            <Run Text="{Binding AmountOfChargesLT30Days, StringFormat='\{0:C\} &lt; 30 days old'}" />
+                        </TextBlock>
+                        <TextBlock Style="{DynamicResource BodyTextBlockStyle}" Margin="25,0,0,10">
+                            <Run Text="{Binding NumberOfCharges30To44Days}" />
+                            <Run Text="for" />
+                            <Run Text="{Binding AmountOfCharges30To44Days, StringFormat='\{0:C\} 30 - 40 days old'}" />
+                        </TextBlock>
+                        <TextBlock Style="{DynamicResource BodyTextBlockStyle}" Margin="25,0,0,10">
+                            <Run Text="{Binding NumberOfChargesGT45Days}" />
+                            <Run Text="for" />
+                            <Run Text="{Binding AmountOfChargesGT45Days, StringFormat='\{0:C\} &gt; 45 days old'}" />
+                        </TextBlock>
+                    </StackPanel>
+                </Grid>
+                <Grid Background="LightGreen" Margin="5,10,5,10" Width="300" Height="300">
+                    <StackPanel Margin="5">
+                        <TextBlock Text="My Reports Summary" Style="{DynamicResource TitleTextBlockStyle}" />
+
+                        <TextBlock Style="{DynamicResource BodyTextBlockStyle}">
+                            <Hyperlink Command="{Binding DataContext.ShowSavedReportsCommand, RelativeSource={RelativeSource AncestorType={x:Type expenses:MainWindow}}}">
+                                <Run Text="{Binding NumberOfSavedReports, StringFormat='\{0\} saved reports'}" />    
+                            </Hyperlink>
+                            <Run Text="totalling" />
+                            <Run Text="{Binding AmountOfSavedReports, StringFormat='\{0:C\}'}" />
+                        </TextBlock>
+                        <TextBlock Style="{DynamicResource BodyTextBlockStyle}" Margin="0,0,0,10">
+                            <Hyperlink Command="{Binding DataContext.ShowPendingReportsCommand, RelativeSource={RelativeSource AncestorType={x:Type expenses:MainWindow}}}">
+                                <Run Text="{Binding NumberOfPendingReports, StringFormat='\{0\} pending reports'}" />    
+                            </Hyperlink>
+                            <Run Text="totalling" />
+                            <Run Text="{Binding AmountOfPendingReports, StringFormat='\{0:C\}'}" />
+                        </TextBlock>
+                    </StackPanel>
+                </Grid>
+                <Grid Background="LightYellow" Margin="5,10,5,10" Width="300" Height="300" 
+                      Visibility="{Binding DataContext.EmployeeViewModel.IsManager, 
+                        RelativeSource={RelativeSource AncestorType={x:Type expenses:MainWindow}}, 
+                        Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <StackPanel Margin="5">
+                        <TextBlock Text="My Approvals Summary" Style="{DynamicResource TitleTextBlockStyle}" />
+
+                        <TextBlock Style="{DynamicResource BodyTextBlockStyle}">
+                            <Hyperlink Command="{Binding DataContext.ApproveReportsCommand, RelativeSource={RelativeSource AncestorType={x:Type expenses:MainWindow}}}">
+                                <Run Text="{Binding NumberOfReportsNeedingApproval, StringFormat='\{0\} approvals'}" />    
+                            </Hyperlink>
+                            <Run Text="totalling" />
+                            <Run Text="{Binding AmountOfReportsNeedingApproval, StringFormat='\{0:C\}'}" />
+                        </TextBlock>
+                    </StackPanel>
+                </Grid>
+
+            </WrapPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>
